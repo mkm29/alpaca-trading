@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+requests = "==2.25.1"
+pandas = "==1.2.2"
+numpy = "==1.20.1"
+scipy = "==1.6.0"
+alpaca-trade-api = "==0.53.0"
+ipykernel = "*"
+pandas-datareader = "*"
+matplotlib = "*"
+
+[dev-packages]
+pytest = "==6.2.2"
+
+[requires]
+python_version = "3.7.4"

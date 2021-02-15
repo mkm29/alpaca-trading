@@ -1,0 +1,233 @@
+{
+ "metadata": {
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.4-final"
+  },
+  "orig_nbformat": 2,
+  "kernelspec": {
+   "name": "python3",
+   "display_name": "Python 3",
+   "language": "python"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2,
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 64,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "import pandas_datareader.data as web\n",
+    "import datetime\n",
+    "\n",
+    "from typing import List, Dict"
+   ]
+  },
+  {
+   "source": [
+    "# Stock Prices EDA"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "START_DATE = dt.datetime(2020,11,12)\n",
+    "END_DATE = dt.datetime(2021,2,12)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 67,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class SmigStock:\n",
+    "\n",
+    "    DATE_FORMAT = \"%Y-%m-%d\"\n",
+    "\n",
+    "    @property\n",
+    "    def tickers(self):\n",
+    "        return self.tickers\n",
+    "\n",
+    "    @tickers.setter\n",
+    "    def tickers(self, tickers: List[str]):\n",
+    "        if tickers and isinstance(tickers, list):\n",
+    "            self.tickers = tickers\n",
+    "\n",
+    "    def add_ticker(self, ticker: str) -> None:\n",
+    "        self.tickers.append(ticker)\n",
+    "\n",
+    "    @property\n",
+    "    def start_date(self) -> \"datetime.datetime\":\n",
+    "        return self.start_date\n",
+    "\n",
+    "    @start_date.setter\n",
+    "    def start_date(self, start_date: str) -> None:\n",
+    "        if not isinstance(end_date, str):\n",
+    "            return\n",
+    "        try:\n",
+    "            self.start_date = datetime.datetime.strptime(start_date, SmigStock.DATE_FORMAT)\n",
+    "        except Exception as e:\n",
+    "            print(str(e))\n",
+    "            raise\n",
+    "\n",
+    "    @property\n",
+    "    def end_date(self) -> \"datetime.datetime\":\n",
+    "        return self.end_date\n",
+    "\n",
+    "    @start_date.setter\n",
+    "    def end_date(self, end_date: str) -> None:\n",
+    "        if not isinstance(end_date, str):\n",
+    "            return\n",
+    "        try:\n",
+    "            self.end_date = datetime.datetime.strptime(end_date, SmigStock.DATE_FORMAT)\n",
+    "        except Exception as e:\n",
+    "            print(str(e))\n",
+    "            raise\n",
+    "\n",
+    "    def __init__(self, tickers: List[str], start_date: str = None, end_date: str = None) -> None:\n",
+    "        self.tickers = tickers\n",
+    "        self.start_date = start_date\n",
+    "        self.end_date = end_date\n",
+    "        self.data = {}\n",
+    "\n",
+    "    def get_prices(self) -> None:\n",
+    "        for ticker in self.tickers:\n",
+    "            df = web.DataReader(ticker, 'yahoo', start_date, end_date)\n",
+    "            df.reset_index(inplace=True)\n",
+    "            df = df[['Date', 'Adj Close']]\n",
+    "            df.columns = ['ds', 'y']\n",
+    "            self.data[ticker] = df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def get_stock_data(ticker, start_date, end_date):\n",
+    "    df = web.DataReader(ticker, 'yahoo', start_date, end_date)\n",
+    "    df.reset_index(inplace=True)\n",
+    "    df = df[['Date', 'Adj Close']]\n",
+    "    df.columns = ['ds', 'y']\n",
+    "    return df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 46,
+   "metadata": {},
+   "outputs": [
+    {
+     "output_type": "execute_result",
+     "data": {
+      "text/plain": [
+       "                     y  daily_ret  daily_percent\n",
+       "ds                                              \n",
+       "2020-11-12  411.760010        NaN            NaN\n",
+       "2020-11-13  408.500000  -3.260010      -0.007917\n",
+       "2020-11-16  408.089996  -0.410004      -0.001004\n",
+       "2020-11-17  441.609985  33.519989       0.082139\n",
+       "2020-11-18  486.640015  45.030029       0.101968"
+      ],
+      "text/html": "<div>\n<style scoped>\n    .dataframe tbody tr th:only-of-type {\n        vertical-align: middle;\n    }\n\n    .dataframe tbody tr th {\n        vertical-align: top;\n    }\n\n    .dataframe thead th {\n        text-align: right;\n    }\n</style>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>y</th>\n      <th>daily_ret</th>\n      <th>daily_percent</th>\n    </tr>\n    <tr>\n      <th>ds</th>\n      <th></th>\n      <th></th>\n      <th></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>2020-11-12</th>\n      <td>411.760010</td>\n      <td>NaN</td>\n      <td>NaN</td>\n    </tr>\n    <tr>\n      <th>2020-11-13</th>\n      <td>408.500000</td>\n      <td>-3.260010</td>\n      <td>-0.007917</td>\n    </tr>\n    <tr>\n      <th>2020-11-16</th>\n      <td>408.089996</td>\n      <td>-0.410004</td>\n      <td>-0.001004</td>\n    </tr>\n    <tr>\n      <th>2020-11-17</th>\n      <td>441.609985</td>\n      <td>33.519989</td>\n      <td>0.082139</td>\n    </tr>\n    <tr>\n      <th>2020-11-18</th>\n      <td>486.640015</td>\n      <td>45.030029</td>\n      <td>0.101968</td>\n    </tr>\n  </tbody>\n</table>\n</div>"
+     },
+     "metadata": {},
+     "execution_count": 46
+    }
+   ],
+   "source": [
+    "df = get_stock_data('TSLA', START_DATE, END_DATE)\n",
+    "df.set_index('ds', inplace=True)\n",
+    "df['daily_ret'] = df.diff(axis=0)\n",
+    "df['daily_percent'] = df['daily_ret'] / df['y'].shift()\n",
+    "df.head()"
+   ]
+  },
+  {
+   "source": [
+    "## Compute Sharp Ratio\n",
+    "\n",
+    "Risk-free rate is ~ $0.08$ for 2021\n",
+    "\n",
+    "$s_a=\\frac{E[R_a - R_b]}{\\sigma_a}$\n"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 51,
+   "metadata": {},
+   "outputs": [
+    {
+     "output_type": "execute_result",
+     "data": {
+      "text/plain": [
+       "                     y  daily_ret  daily_percent    excess\n",
+       "ds                                                        \n",
+       "2020-11-12  411.760010        NaN            NaN       NaN\n",
+       "2020-11-13  408.500000  -3.260010      -0.007917 -0.008417\n",
+       "2020-11-16  408.089996  -0.410004      -0.001004 -0.001504\n",
+       "2020-11-17  441.609985  33.519989       0.082139  0.081639\n",
+       "2020-11-18  486.640015  45.030029       0.101968  0.101468"
+      ],
+      "text/html": "<div>\n<style scoped>\n    .dataframe tbody tr th:only-of-type {\n        vertical-align: middle;\n    }\n\n    .dataframe tbody tr th {\n        vertical-align: top;\n    }\n\n    .dataframe thead th {\n        text-align: right;\n    }\n</style>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>y</th>\n      <th>daily_ret</th>\n      <th>daily_percent</th>\n      <th>excess</th>\n    </tr>\n    <tr>\n      <th>ds</th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>2020-11-12</th>\n      <td>411.760010</td>\n      <td>NaN</td>\n      <td>NaN</td>\n      <td>NaN</td>\n    </tr>\n    <tr>\n      <th>2020-11-13</th>\n      <td>408.500000</td>\n      <td>-3.260010</td>\n      <td>-0.007917</td>\n      <td>-0.008417</td>\n    </tr>\n    <tr>\n      <th>2020-11-16</th>\n      <td>408.089996</td>\n      <td>-0.410004</td>\n      <td>-0.001004</td>\n      <td>-0.001504</td>\n    </tr>\n    <tr>\n      <th>2020-11-17</th>\n      <td>441.609985</td>\n      <td>33.519989</td>\n      <td>0.082139</td>\n      <td>0.081639</td>\n    </tr>\n    <tr>\n      <th>2020-11-18</th>\n      <td>486.640015</td>\n      <td>45.030029</td>\n      <td>0.101968</td>\n      <td>0.101468</td>\n    </tr>\n  </tbody>\n</table>\n</div>"
+     },
+     "metadata": {},
+     "execution_count": 51
+    }
+   ],
+   "source": [
+    "rf = 0.05/100\n",
+    "df['excess'] = df.daily_percent-rf\n",
+    "df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 61,
+   "metadata": {},
+   "outputs": [
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": [
+      "Sharp Ratio for Tesla = 1.2128319245357249\n"
+     ]
+    }
+   ],
+   "source": [
+    "s = (df.shape[0]/np.sqrt(252))*df.daily_percent.mean()/df.daily_percent.std()\n",
+    "print(\"Sharp Ratio for Tesla = %s\" % s)"
+   ]
+  }
+ ]
+}
