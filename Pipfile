@@ -12,6 +12,9 @@ alpaca-trade-api = "==0.53.0"
 ipykernel = "*"
 pandas-datareader = "*"
 matplotlib = "*"
+beautifulsoup4 = "*"
+lxml = "*"
+selenium = "*"
 
 [dev-packages]
 pytest = "==6.2.2"
